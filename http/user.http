@@ -1,0 +1,8 @@
+### get
+GET http://{{domain}}/v1/user/get
+Content-Type: application/json
+
+### get
+GET http://{{domain}}/v1/user/create
+Content-Type: application/json
+
