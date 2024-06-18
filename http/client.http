@@ -1,0 +1,10 @@
+### get
+POST http://{{domain}}/v1/client/register
+Content-Type: application/json
+
+{
+  "nickname": "yang",
+  "account": "666@qq.com",
+  "secret": "123456",
+  "type": 100
+}

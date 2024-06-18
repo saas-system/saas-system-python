@@ -8,6 +8,10 @@ flask = "*"
 wtforms = "==3.1.2"
 sqlalchemy = "==2.0.30"
 flask-sqlalchemy = "==3.1.1"
+cymysql = "==1.0.1"
+email_validator = "==2.1.2"
+scrypt = "==0.8.24"
+cryptocode = "*"
 
 [dev-packages]
 
