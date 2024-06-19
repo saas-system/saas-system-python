@@ -1,28 +1,47 @@
-from wtforms import StringField, IntegerField
+from wtforms import StringField, IntegerField, Form
 from wtforms.validators import DataRequired, length, Email, Regexp
 from wtforms import ValidationError
 
 from app.libs.enums import ClientTypeEnum
+from app.libs.error_code import ClientTypeError
 from app.models.user import User
-from app.validators.base import BaseForm as Form
+
+
+# from app.validators.base import BaseForm as Form
 
 
 class ClientForm(Form):
-    account = StringField(validators=[DataRequired(message='不允许为空'), length(
-        min=5, max=32
-    )])
+    # 用户账号
+    account = StringField(
+        # 验证器
+        validators=[
+            DataRequired(message='不允许为空'),
+            length(min=5, max=32)
+        ]
+    )
+    # 用户密码
     secret = StringField()
-    type = IntegerField(validators=[DataRequired()])
+    # 客户端类型
+    type = IntegerField(
+        validators=[
+            DataRequired()
+        ]
+    )
 
     def validate_type(self, value):
         try:
             client = ClientTypeEnum(value.data)
+        # except ValueError as e:
+        #     raise e
         except ValueError as e:
-            raise e
+            raise ClientTypeError(e.args[0])
         self.type.data = client
 
 
 class UserEmailForm(ClientForm):
+    """
+    校验 email 注册的表单
+    """
     account = StringField(validators=[
         Email(message='invalidate email')
     ])
@@ -35,6 +54,11 @@ class UserEmailForm(ClientForm):
                                        length(min=2, max=22)])
 
     def validate_account(self, value):
+        """
+        校验账号是否已经被注册过
+        :param value:
+        :return:
+        """
         if User.query.filter_by(email=value.data).first():
             raise ValidationError()
 

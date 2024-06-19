@@ -5,11 +5,10 @@ from app.models.base import Base, db
 
 
 class User(Base):
-    __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     email = Column(String(24), unique=True, nullable=False)
     nickname = Column(String(24), unique=True)
-    auth = Column(SmallInteger, default=1)
+    auth = Column(SmallInteger, default=1) #1普通用户2管理员
     _password = Column('password', String(200))
 
     @property

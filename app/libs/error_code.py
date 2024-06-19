@@ -1,5 +1,3 @@
-from werkzeug.exceptions import HTTPException
-
 from app.libs.error import APIException
 
 

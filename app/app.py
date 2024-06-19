@@ -8,7 +8,7 @@ def register_blueprints(app):
 def register_plugin(app):
     from app.models.base import db
     db.init_app(app)
-    # 创建数据库
+    # 上下文创建数据库
     with app.app_context():
         db.create_all()
     pass
