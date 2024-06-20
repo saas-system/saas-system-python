@@ -33,6 +33,12 @@ class User(Base):
 
     @staticmethod
     def verify(email, password):
+        """
+
+        :param email:
+        :param password:
+        :return:
+        """
         user = User.query.filter_by(email=email).first_or_404()
         if not user.check_password(password):
             raise AuthFailed()
@@ -40,6 +46,11 @@ class User(Base):
         return {'uid': user.id, 'scope': scope}
 
     def check_password(self, raw):
+        """
+        检查密码
+        :param raw:
+        :return:
+        """
         if not self._password:
             return False
         return check_password_hash(self._password, raw)
