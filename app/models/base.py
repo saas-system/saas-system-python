@@ -1,4 +1,4 @@
-from app.libs.error_code import NotFound
+from app.exception.error_code import NotFound
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy
 from sqlalchemy.orm import Query as BaseQuery

@@ -1,6 +1,6 @@
 from flask import request
 
-from app.libs.error_code import Success, ClientTypeError
+from app.exception.error_code import ClientTypeError
 from app.libs.redprint import Redprint
 from app.models.user import User
 from app.validators.forms import ClientForm, UserEmailForm

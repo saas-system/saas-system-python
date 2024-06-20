@@ -3,7 +3,6 @@ from wtforms.validators import DataRequired, length, Email, Regexp
 from wtforms import ValidationError
 
 from app.libs.enums import ClientTypeEnum
-from app.libs.error_code import ClientTypeError
 from app.models.user import User
 
 

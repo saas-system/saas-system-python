@@ -1,4 +1,4 @@
-from app.libs.error import APIException
+from app.exception.error import APIException
 
 
 class Success(APIException):
