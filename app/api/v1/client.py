@@ -20,7 +20,10 @@ def create_client():
             ClientTypeEnum.USER_EMAIL: __register_user_by_email
             # 小程序...
         }
-        promise[form.type.data]()
+        try:
+            promise[form.type.data]()
+        except KeyError as e:
+            raise ClientTypeError('Invalid client type')
     else:
         raise ClientTypeError()
     return 'success'

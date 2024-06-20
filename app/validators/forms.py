@@ -31,10 +31,8 @@ class ClientForm(Form):
     def validate_type(self, value):
         try:
             client = ClientTypeEnum(value.data)
-        # except ValueError as e:
-        #     raise e
         except ValueError as e:
-            raise ClientTypeError(e.args[0])
+            raise e
         self.type.data = client
 
 
