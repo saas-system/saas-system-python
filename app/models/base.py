@@ -13,15 +13,15 @@ class SQLAlchemy(_SQLAlchemy):
             yield
             self.session.commit()
         except Exception as e:
-            self.session.rollback()
+            db.session.rollback()
             raise e
 
 
 class Query(BaseQuery):
     def filter_by(self, **kwargs):
-        if 'status' not in kwargs:
+        if 'status' not in kwargs.keys():
             kwargs['status'] = 1
-        return super().filter_by(**kwargs)
+        return super(Query, self).filter_by(**kwargs)
 
     def get_or_404(self, ident):
         rv = self.get(ident)
@@ -41,8 +41,11 @@ db = SQLAlchemy(query_class=Query)
 
 class Base(db.Model):
     __abstract__ = True
-    create_time = Column(Integer, default=lambda: int(datetime.now().timestamp()))
+    create_time = Column(Integer)
     status = Column(SmallInteger, default=1)
+
+    def __init__(self):
+        self.create_time = int(datetime.now().timestamp())
 
     def __getitem__(self, item):
         return getattr(self, item)
@@ -51,7 +54,8 @@ class Base(db.Model):
     def create_datetime(self):
         if self.create_time:
             return datetime.fromtimestamp(self.create_time)
-        return None
+        else:
+            return None
 
     def set_attrs(self, attrs_dict):
         for key, value in attrs_dict.items():
@@ -66,14 +70,12 @@ class Base(db.Model):
 
     def hide(self, *keys):
         for key in keys:
-            if key in self.fields:
-                self.fields.remove(key)
+            self.fields.remove(key)
         return self
 
     def append(self, *keys):
         for key in keys:
-            if key not in self.fields:
-                self.fields.append(key)
+            self.fields.append(key)
         return self
 
 
@@ -81,22 +83,24 @@ class MixinJSONSerializer:
     @orm.reconstructor
     def init_on_load(self):
         self._fields = []
+        # self._include = []
         self._exclude = []
+
         self._set_fields()
-        self._prune_fields()
+        self.__prune_fields()
 
     def _set_fields(self):
         pass
 
-    def _prune_fields(self):
-        columns = inspect(self.__class__).columns.keys()
+    def __prune_fields(self):
+        columns = inspect(self.__class__).columns
         if not self._fields:
-            self._fields = list(set(columns) - set(self._exclude))
+            all_columns = set(columns.keys())
+            self._fields = list(all_columns - set(self._exclude))
 
     def hide(self, *args):
         for key in args:
-            if key in self._fields:
-                self._fields.remove(key)
+            self._fields.remove(key)
         return self
 
     def keys(self):

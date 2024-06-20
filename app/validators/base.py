@@ -1,6 +1,5 @@
 from flask import request
 from wtforms import Form
-
 from app.exception.error_code import ParameterException
 
 

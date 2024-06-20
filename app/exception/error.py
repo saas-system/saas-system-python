@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, json
 from werkzeug.exceptions import HTTPException
 
 
@@ -7,24 +7,26 @@ class APIException(HTTPException):
     msg = 'sorry, we made a mistake (*￣︶￣)!'
     error_code = 999
 
-    def __init__(self, msg=None, code=None, error_code=None, headers=None):
-        if code is not None:
+    def __init__(self, msg=None, code=None, error_code=None,
+                 headers=None):
+        if code:
             self.code = code
-        if error_code is not None:
+        if error_code:
             self.error_code = error_code
-        if msg is not None:
+        if msg:
             self.msg = msg
-        super().__init__(msg, None)
+        super(APIException, self).__init__(msg, None)
 
-    def get_body(self, environ=None):
+    def get_body(self, environ=None, *args):
         body = dict(
             msg=self.msg,
             error_code=self.error_code,
             request=request.method + ' ' + self.get_url_no_param()
         )
-        return jsonify(body)
+        text = json.dumps(body)
+        return text
 
-    def get_headers(self, environ=None, *args, **kwargs):
+    def get_headers(self, environ=None, *args):
         """Get a list of headers."""
         return [('Content-Type', 'application/json')]
 

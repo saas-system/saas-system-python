@@ -23,13 +23,13 @@ def register_error_handlers(app):
         response.status_code = 400
         return response
 
-    @app.errorhandler(Exception)
-    def handle_generic_exception(error):
-        app.logger.error(f"Unhandled Exception: {str(error)}")
-        response = jsonify({
-            'msg': 'An unexpected exception occurred.',
-            'error_code': 1000,
-            'request': request.method + ' ' + request.path
-        })
-        response.status_code = 500
-        return response
+    # @app.errorhandler(Exception)
+    # def handle_generic_exception(error):
+    #     app.logger.error(f"Unhandled Exception: {str(error)}")
+    #     response = jsonify({
+    #         'msg': 'An unexpected exception occurred.',
+    #         'error_code': 1000,
+    #         'request': request.method + ' ' + request.path
+    #     })
+    #     response.status_code = 500
+    #     return response

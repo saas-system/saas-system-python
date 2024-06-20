@@ -1,8 +1,6 @@
 from flask import Flask
-
-from app.exception.error_handlers import register_error_handlers
-
 from app.config.log import setup_logger
+from app.exception.error_handlers import register_error_handlers
 
 
 def register_blueprints(app):
