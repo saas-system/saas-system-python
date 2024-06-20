@@ -18,13 +18,8 @@ def framework_error(e):
         error_code = 1007
         return APIException(msg, code, error_code)
     else:
-        # 调试模式
-        # log
-        if not app.config['DEBUG']:
-            return ServerError()
-        else:
-            raise e
+        return ServerError()
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run()
