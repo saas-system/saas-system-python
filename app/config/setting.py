@@ -1,2 +1,1 @@
-# 示例配置
-DEBUG = True
+TOKEN_EXPIRATION = 30 * 24 * 3600

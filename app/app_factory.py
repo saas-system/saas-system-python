@@ -1,6 +1,5 @@
 from flask import Flask
 from app.config.log import setup_logger
-from app.exception.error_handlers import register_error_handlers
 
 
 def register_blueprints(app):
@@ -28,8 +27,5 @@ def create_app():
 
     # 设置日志
     setup_logger(app)
-
-    # 全局捕获异常
-    register_error_handlers(app)
 
     return app
