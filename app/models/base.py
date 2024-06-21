@@ -24,12 +24,21 @@ class Query(BaseQuery):
         return super(Query, self).filter_by(**kwargs)
 
     def get_or_404(self, ident):
+        """
+        重写get_or_404方法，返回自定义的NotFound异常
+        :param ident:
+        :return:
+        """
         rv = self.get(ident)
         if not rv:
             raise NotFound()
         return rv
 
     def first_or_404(self):
+        """
+        重写first_or_404方法，返回自定义的NotFound异常
+        :return:
+        """
         rv = self.first()
         if not rv:
             raise NotFound()

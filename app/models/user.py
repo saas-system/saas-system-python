@@ -1,4 +1,4 @@
-from sqlalchemy import inspect, Column, Integer, String, SmallInteger, orm
+from sqlalchemy import  Column, Integer, String, SmallInteger
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.exception.error_code import AuthFailed
 from app.models.base import Base, db

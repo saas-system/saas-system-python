@@ -14,6 +14,7 @@ User = namedtuple('User', ['uid', 'ac_type', 'scope'])
 # 配置日志
 logging.basicConfig(level=logging.DEBUG)
 
+
 @auth.verify_password
 def verify_password(token, password):
     """

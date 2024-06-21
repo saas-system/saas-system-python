@@ -14,9 +14,14 @@ api = Redprint('token')
 
 @api.route('', methods=['POST'])
 def get_token():
+    """
+    获取TOKEN
+    :return:
+    """
     form = ClientForm().validate_for_api()
+    # 验证身份
     identity = verify_identity(ClientTypeEnum(form.type.data), form.account.data, form.secret.data)
-
+    # 生成令牌
     token = generate_auth_token(identity['uid'], form.type.data, identity['scope'],
                                 current_app.config['TOKEN_EXPIRATION'])
     response_data = {
@@ -27,7 +32,9 @@ def get_token():
 
 @api.route('/secret', methods=['POST'])
 def get_token_info():
-    """获取令牌信息"""
+    """
+    获取令牌信息
+    """
     form = TokenForm().validate_for_api()
     token_info = verify_token(form.token.data)
 
@@ -41,7 +48,9 @@ def get_token_info():
 
 
 def generate_auth_token(uid: int, ac_type: ClientTypeEnum, scope: str = None, expiration: int = 7200) -> str:
-    """生成令牌"""
+    """
+    生成令牌
+    """
     payload = {
         'uid': uid,
         'type': ac_type.value,
@@ -55,7 +64,9 @@ def generate_auth_token(uid: int, ac_type: ClientTypeEnum, scope: str = None, ex
 
 
 def verify_identity(client_type: ClientTypeEnum, account: str, secret: str) -> Dict[str, Any]:
-    """验证身份"""
+    """
+    验证身份
+    """
     verifier = {
         ClientTypeEnum.USER_EMAIL: User.verify,
     }
