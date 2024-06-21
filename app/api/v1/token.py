@@ -1,10 +1,11 @@
+import jwt
 from flask import current_app, jsonify
 from app.libs.enums import ClientTypeEnum
 from app.exception.error_code import AuthFailed
 from app.libs.redprint import Redprint
 from app.models.user import User
 from app.validators.forms import ClientForm, TokenForm
-from authlib.jose import JsonWebToken, JWTClaims, JoseError
+from authlib.jose import JsonWebToken, JoseError
 from typing import Dict, Any
 from datetime import datetime, timedelta
 
@@ -41,8 +42,6 @@ def get_token_info():
 
 def generate_auth_token(uid: int, ac_type: ClientTypeEnum, scope: str = None, expiration: int = 7200) -> str:
     """生成令牌"""
-    jwt = JsonWebToken(['HS256'])
-    header = {'alg': 'HS256'}
     payload = {
         'uid': uid,
         'type': ac_type.value,
@@ -51,8 +50,8 @@ def generate_auth_token(uid: int, ac_type: ClientTypeEnum, scope: str = None, ex
         'exp': datetime.utcnow() + timedelta(seconds=expiration)
     }
     key = current_app.config['SECRET_KEY']
-    token = jwt.encode(header, payload, key)
-    return token.decode('ascii')
+    token = jwt.encode(payload, key, algorithm='HS256')
+    return token
 
 
 def verify_identity(client_type: ClientTypeEnum, account: str, secret: str) -> Dict[str, Any]:
