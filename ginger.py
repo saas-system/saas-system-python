@@ -1,5 +1,5 @@
 from werkzeug.exceptions import HTTPException
-from app.app_factory import create_app
+from app.app import create_app
 from app.exception.error import APIException
 from app.exception.error_code import ServerError
 
