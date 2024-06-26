@@ -1,4 +1,4 @@
-from sqlalchemy import  Column, Integer, String, SmallInteger
+from sqlalchemy import Column, Integer, String, SmallInteger
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.exception.error_code import AuthFailed
 from app.models.base import Base, db
@@ -11,8 +11,13 @@ class User(Base):
     auth = Column(SmallInteger, default=1)
     _password = Column('password', String(100))
 
-    def keys(self):
-        return ['id', 'email', 'nickname', 'auth']
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'nickname': self.nickname,
+            'auth': self.auth,
+        }
 
     @property
     def password(self):

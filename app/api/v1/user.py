@@ -1,6 +1,9 @@
-from app.exception.error_code import NotFound
+from flask import jsonify, g
+
+from app.exception.error_code import DeleteSuccess
 from app.libs.redprint import Redprint
 from app.libs.token_auth import auth
+from app.models.base import db
 from app.models.user import User
 
 api = Redprint('user')
@@ -9,15 +12,23 @@ api = Redprint('user')
 @api.route('/<int:uid>', methods=['GET'])
 @auth.login_required
 def get_user(uid):
-    """
-    获取用户信息
-    :param uid:
-    :return:
-    :说明：方式一：account secret对象
-    :说明：方式二：token 1个月 2个月， 是否过期，是否合法
-    """
-    user = User.Query.get_or_404()
-    return 'get user'
+    user = User.query.filter_by(id=uid).first_or_404()
+    return jsonify(user.to_dict())
+
+
+@api.route('', methods=['DELETE'])
+@auth.login_required
+def delete_user():
+    uid = g.user.uid   # 防止把别人删除，只删除自己的，g变量是线程隔离
+    with db.auto_commit():
+        user = User.query.filter_by(id=uid).first_or_404()
+        user.delete()
+    return DeleteSuccess()
+
+
+@api.route("", methods=['PUT'])
+def update_user(uid):
+    return 'update user'
 
 
 @api.route('/create')
